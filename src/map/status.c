@@ -3577,7 +3577,9 @@ int status_calc_pc_(struct map_session_data* sd, enum e_status_calc_opt opt)
 			sd->subele[ELE_FIRE] -= i;
 		}
 		if (sc->data[SC_MTF_MLEATKED] )
-			sd->subele[ELE_NEUTRAL] += 2;
+			sd->subele[ELE_NEUTRAL] += sc->data[SC_MTF_MLEATKED]->val3;
+		if (sc->data[SC_MTF_CRIDAMAGE])
+			sd->bonus.crit_atk_rate += sc->data[SC_MTF_CRIDAMAGE]->val1;
 		if( sc->data[SC_FIRE_INSIGNIA] && sc->data[SC_FIRE_INSIGNIA]->val1 == 3 )
 			sd->magic_addele[ELE_FIRE] += 25;
 		if( sc->data[SC_WATER_INSIGNIA] && sc->data[SC_WATER_INSIGNIA]->val1 == 3 )
@@ -4802,7 +4804,7 @@ static unsigned short status_calc_str(struct block_list *bl, struct status_chang
 	if(sc->data[SC_KYOUGAKU])
 		str -= sc->data[SC_KYOUGAKU]->val2;
 	if(sc->data[SC_FULL_THROTTLE])
-		str += str * 20 / 100;
+		str += str * sc->data[SC_FULL_THROTTLE]->val3 / 100;
 
 	return (unsigned short)cap_value(str,0,USHRT_MAX);
 }
@@ -4866,7 +4868,7 @@ static unsigned short status_calc_agi(struct block_list *bl, struct status_chang
 	if(sc->data[SC_KYOUGAKU])
 		agi -= sc->data[SC_KYOUGAKU]->val2;
 	if(sc->data[SC_FULL_THROTTLE])
-		agi += agi * 20 / 100;
+		agi += agi * sc->data[SC_FULL_THROTTLE]->val3 / 100;
 
 	return (unsigned short)cap_value(agi,0,USHRT_MAX);
 }
@@ -4920,7 +4922,7 @@ static unsigned short status_calc_vit(struct block_list *bl, struct status_chang
 	if(sc->data[SC_STRIPARMOR] && bl->type != BL_PC)
 		vit -= vit * sc->data[SC_STRIPARMOR]->val2/100;
 	if(sc->data[SC_FULL_THROTTLE])
-		vit += vit * 20 / 100;
+		vit += vit * sc->data[SC_FULL_THROTTLE]->val3 / 100;
 #ifdef RENEWAL
 	if(sc->data[SC_DEFENCE])
 		vit += sc->data[SC_DEFENCE]->val2;
@@ -4986,7 +4988,7 @@ static unsigned short status_calc_int(struct block_list *bl, struct status_chang
 	if(sc->data[SC_KYOUGAKU])
 		int_ -= sc->data[SC_KYOUGAKU]->val2;
 	if(sc->data[SC_FULL_THROTTLE])
-		int_ += int_ * 20 / 100;
+		int_ += int_ * sc->data[SC_FULL_THROTTLE]->val3 / 100;
 
 	if(bl->type != BL_PC) {
 		if(sc->data[SC_STRIPHELM])
@@ -5060,7 +5062,7 @@ static unsigned short status_calc_dex(struct block_list *bl, struct status_chang
 	if(sc->data[SC_MARSHOFABYSS])
 		dex -= dex * sc->data[SC_MARSHOFABYSS]->val2 / 100;
 	if(sc->data[SC_FULL_THROTTLE])
-		dex += dex * 20 / 100;
+		dex += dex * sc->data[SC_FULL_THROTTLE]->val3 / 100;
 
 	return (unsigned short)cap_value(dex,0,USHRT_MAX);
 }
@@ -5117,7 +5119,7 @@ static unsigned short status_calc_luk(struct block_list *bl, struct status_chang
 	if(sc->data[SC_BANANA_BOMB])
 		luk -= luk * sc->data[SC_BANANA_BOMB]->val1 / 100;
 	if(sc->data[SC_FULL_THROTTLE])
-		luk += luk * 20 / 100;
+		luk += luk * sc->data[SC_FULL_THROTTLE]->val3 / 100;
 
 	return (unsigned short)cap_value(luk,0,USHRT_MAX);
 }
@@ -5392,7 +5394,7 @@ static unsigned short status_calc_matk(struct block_list *bl, struct status_chan
 	if (sc->data[SC_MOONLITSERENADE])
 		matk += sc->data[SC_MOONLITSERENADE]->val3/100;
 	if (sc->data[SC_MTF_MATK])
-		matk += matk * 25 / 100;
+		matk += matk * sc->data[SC_MTF_MATK]->val1 / 100;
 
 	return (unsigned short)cap_value(matk,0,USHRT_MAX);
 }
@@ -5479,9 +5481,9 @@ static signed short status_calc_hit(struct block_list *bl, struct status_change 
 	if (sc->data[SC_TEARGAS])
 		hit -= hit * 50 / 100;
 	if(sc->data[SC_ILLUSIONDOPING])
-		hit -= 50;
+		hit -= sc->data[SC_ILLUSIONDOPING]->val2;
 	if (sc->data[SC_MTF_ASPD])
-		hit += 5;
+		hit += sc->data[SC_MTF_ASPD]->val2;
 
 	return (short)cap_value(hit,1,SHRT_MAX);
 }
@@ -5942,7 +5944,7 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 			if( sc->data[SC_GOSPEL] && sc->data[SC_GOSPEL]->val4 == BCT_ENEMY )
 				val = max( val, 75 );
 			if( sc->data[SC_SLOWDOWN] ) // Slow Potion
-				val = max( val, 100 );
+				val = max( val, sc->data[SC_SLOWDOWN]->val1 );
 			if( sc->data[SC_GATLINGFEVER] )
 				val = max( val, 100 );
 			if( sc->data[SC_SUITON] )
@@ -5983,7 +5985,7 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 
 		// GetMoveHasteValue1()
 		if( sc->data[SC_SPEEDUP1] ) // !FIXME: used both by NPC_AGIUP and Speed Potion script
-			val = max( val, 50 );
+			val = max( val, sc->data[SC_SPEEDUP1]->val1 );
 		if( sc->data[SC_INCREASEAGI] )
 			val = max( val, 25 );
 		if( sc->data[SC_WINDWALK] )
@@ -6017,7 +6019,7 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 
 		// !FIXME: official items use a single bonus for this [ultramage]
 		if( sc->data[SC_SPEEDUP0] ) // Temporary item-based speedup
-			val = max( val, 25 );
+			val = max( val, sc->data[SC_SPEEDUP0]->val1 );
 		if( sd && sd->bonus.speed_rate + sd->bonus.speed_add_rate < 0 ) // Permanent item-based speedup
 			val = max( val, -(sd->bonus.speed_rate + sd->bonus.speed_add_rate) );
 
@@ -6202,7 +6204,7 @@ static short status_calc_fix_aspd(struct block_list *bl, struct status_change *s
 	if (sc->data[SC_FIGHTINGSPIRIT] && sc->data[SC_FIGHTINGSPIRIT]->val2)
 		aspd -= sc->data[SC_FIGHTINGSPIRIT]->val2;
 	if (sc->data[SC_MTF_ASPD])
-		aspd -= 10;
+		aspd -= sc->data[SC_MTF_ASPD]->val1;
 
 	return cap_value(aspd, 0, 2000); // Will be recap for proper bl anyway
 }
@@ -9420,6 +9422,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			sc_start(src,bl,SC_STRIPSHIELD,100,val1,tick);
 			break;
 		case SC__FEINTBOMB:
+			val2 = 1; // -1 SP each iteration
 			val4 = tick / 1000;
 			tick_time = 1000;
 			val_flag |= 1|2;
@@ -9835,6 +9838,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			break;
 		case SC_FULL_THROTTLE:
 			val2 = ( val1 == 1 ? 6 : 5 - val1 );
+			val3 = 20; //+% AllStats
 			tick_time = 1000;
 			val4 = tick / tick_time;
 			tick = -1;
@@ -9845,7 +9849,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val4 = tick / tick_time;
 			break;
 		case SC_TELEKINESIS_INTENSE:
-			val2 = 10 * val1; // sp consum / casttime reduc %
+			val2 = val4 = 10 * val1; // sp consum / casttime reduc %
 			val3 = 40 * val1; // magic dmg bonus
 			break;
 		case SC_OFFERTORIUM:
@@ -9869,7 +9873,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			break;
 		case SC_MONSTER_TRANSFORM:
 			if( !mobdb_checkid(val1) )
-				val1 = 1002; // Default poring
+				val1 = MOBID_PORING; // Default poring
 			break;
 		case SC_APPLEIDUN:
 			val2 = (5 + 2 * val1) + (status_get_vit(src) / 10); //HP Rate: (5 + 2 * skill_lv) + (vit/10) + (BA_MUSICALLESSON level)
@@ -9878,6 +9882,9 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			break;
 		case SC_EPICLESIS:
 			val2 = 5 * val1; //HP rate bonus
+			break;
+		case SC_ILLUSIONDOPING:
+			val2 = 50; // -Hit
 			break;
 
 		/* Rebellion */
@@ -11861,7 +11868,7 @@ int status_change_timer(int tid, unsigned int tick, int id, intptr_t data)
 
 	case SC__FEINTBOMB:
 		if( --(sce->val4) >= 0) {
-			if( !status_charge(bl, 0, 1) )
+			if( !status_charge(bl, 0, sce->val2) )
 				break;
 			sc_timer_next(1000 + tick, status_change_timer, bl->id, data);
 			return 0;

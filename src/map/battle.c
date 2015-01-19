@@ -3027,10 +3027,6 @@ struct Damage battle_calc_skill_base_damage(struct Damage wd, struct block_list 
 					ATK_ADDRATE(wd.damage, wd.damage2, sd->bonus.crit_atk_rate);
 				}
 #endif
-				if(sc && sc->data[SC_MTF_CRIDAMAGE] && is_attack_critical(wd, src, target, skill_id, skill_lv, false)) {
-					ATK_ADDRATE(wd.damage, wd.damage2, 25);
-					RE_ALLATK_ADDRATE(wd, 25); //Temporary it should be 'bonus.crit_atk_rate'
-				}
 				if(sd->status.party_id && (skill=pc_checkskill(sd,TK_POWER)) > 0) {
 					if( (i = party_foreachsamemap(party_sub_count, sd, 0)) > 1 ) { // exclude the player himself [Inkfish]
 						ATK_ADDRATE(wd.damage, wd.damage2, 2*skill*i);
@@ -4285,8 +4281,8 @@ struct Damage battle_attack_sc_bonus(struct Damage wd, struct block_list *src, s
 #endif
 		}
 		if(sc->data[SC_MTF_RANGEATK] && (wd.flag&(BF_LONG|BF_MAGIC)) == BF_LONG) { // Monster Transformation bonus
-			ATK_ADDRATE(wd.damage, wd.damage2, 25);
-			RE_ALLATK_ADDRATE(wd, 25);
+			ATK_ADDRATE(wd.damage, wd.damage2, sc->data[SC_MTF_RANGEATK]->val1);
+			RE_ALLATK_ADDRATE(wd, sc->data[SC_MTF_RANGEATK]->val1);
 		}
 	}
 
@@ -6809,8 +6805,8 @@ enum damage_lv battle_weapon_attack(struct block_list* src, struct block_list* t
 			pc_addspiritball(tsd, skill_get_time2(SR_GENTLETOUCH_ENERGYGAIN, tsc->data[SC_GT_ENERGYGAIN]->val1), spheres);
 	}
 
-	if (tsc && tsc->data[SC_MTF_MLEATKED] && rnd()%100 < 20)
-		clif_skill_nodamage(target, target, SM_ENDURE, 5, sc_start(src, target, SC_ENDURE, 100, 5, skill_get_time(SM_ENDURE, 5)));
+	if (tsc && tsc->data[SC_MTF_MLEATKED] && rnd()%100 < tsc->data[SC_MTF_MLEATKED]->val2)
+		clif_skill_nodamage(target, target, SM_ENDURE, tsc->data[SC_MTF_MLEATKED]->val1, sc_start(src, target, SC_ENDURE, 100, tsc->data[SC_MTF_MLEATKED]->val1, skill_get_time(SM_ENDURE, tsc->data[SC_MTF_MLEATKED]->val1)));
 
 	if(tsc && tsc->data[SC_KAAHI] && tsc->data[SC_KAAHI]->val4 == INVALID_TIMER && tstatus->hp < tstatus->max_hp)
 		tsc->data[SC_KAAHI]->val4 = add_timer(tick + skill_get_time2(SL_KAAHI,tsc->data[SC_KAAHI]->val1), kaahi_heal_timer, target->id, SC_KAAHI); //Activate heal.

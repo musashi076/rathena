@@ -694,7 +694,7 @@ typedef enum sc_type {
 	SC_QUEST_BUFF1,
 	SC_QUEST_BUFF2,
 	SC_QUEST_BUFF3,
-	
+
 	SC_ALL_RIDING,
 
 	SC_TEARGAS_SOB,
