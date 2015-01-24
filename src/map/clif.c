@@ -14148,13 +14148,14 @@ void clif_parse_HomMenu(int fd, struct map_session_data *sd)
 /// 0292
 void clif_parse_AutoRevive(int fd, struct map_session_data *sd)
 {
-	int item_position = pc_search_inventory(sd, ITEMID_TOKEN_OF_SIEGFRIED);
-	int hp = 100, sp = 100;
+	short item_position = pc_search_inventory(sd, ITEMID_TOKEN_OF_SIEGFRIED);
+	uint8 hp = 100, sp = 100;
 
 	if (item_position < 0) {
 		if (sd->sc.data[SC_LIGHT_OF_REGENE]) {
+			// HP restored
 			hp = sd->sc.data[SC_LIGHT_OF_REGENE]->val2;
-			status_change_end(&sd->bl, SC_LIGHT_OF_REGENE, INVALID_TIMER);
+			sp = 0;
 		}
 		else
 			return;
@@ -14166,7 +14167,9 @@ void clif_parse_AutoRevive(int fd, struct map_session_data *sd)
 	if (!status_revive(&sd->bl, hp, sp))
 		return;
 
-	if (item_position >= 0)
+	if (item_position < 0)
+		status_change_end(&sd->bl, SC_LIGHT_OF_REGENE, INVALID_TIMER);
+	else
 		pc_delitem(sd, item_position, 1, 0, 1, LOG_TYPE_CONSUME);
 
 	clif_skill_nodamage(&sd->bl, &sd->bl, ALL_RESURRECTION, 4, 1);
