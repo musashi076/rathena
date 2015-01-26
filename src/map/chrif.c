@@ -572,7 +572,7 @@ int chrif_sendmapack(int fd) {
 		exit(EXIT_FAILURE);
 	}
 
-	memcpy(wisp_server_name, RFIFOP(fd,3), NAME_LENGTH);
+	memcpy(map_config.wisp_server_name, RFIFOP(fd,3), NAME_LENGTH);
 
 	chrif_on_ready();
 
