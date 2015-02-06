@@ -76,6 +76,15 @@ extern struct MapServer_Schema mapserv_schema_config; /// map-server tables
 /// Get map-server table value. Table names @see MapServer_Schema
 #define mapserv_table(table) ( StringBuf_Value(mapserv_schema_config.table) )
 
+struct MapServer_File {
+	StringBuf *group;	  ///< Prefered file for groups.conf
+	StringBuf *atcommand; ///< Prefered file for atcommand_athena.conf
+	StringBuf *motd;	  ///< Prefered file for motd
+};
+extern struct MapServer_File mapserv_file_config;
+/// Get file name
+#define mapserv_file(filename) ( StringBuf_Value(mapserv_file_config.filename) )
+
 struct Map_Config {
 	// Map-server
 	uint16 map_server_port;
@@ -91,8 +100,6 @@ struct Map_Config {
 	StringBuf *log_db_id;
 	StringBuf *log_db_pw;
 	StringBuf *log_db_db;
-
-	StringBuf *motd_txt;
 
 	char wisp_server_name[NAME_LENGTH]; // can be modified in char-server configuration file
 

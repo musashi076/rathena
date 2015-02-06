@@ -10713,11 +10713,12 @@ void pc_readdb(void) {
 int pc_read_motd(void)
 {
 	FILE* fp;
+	const char *motd_file = mapserv_file(motd);
 	// clear old MOTD
 	memset(motd_text, 0, sizeof(motd_text));
 
 	// read current MOTD
-	if( ( fp = fopen(StringBuf_Value(map_config.motd_txt), "r") ) != NULL )
+	if( ( fp = fopen(motd_file, "r") ) != NULL )
 	{
 		unsigned int entries = 0;
 
@@ -10736,7 +10737,7 @@ int pc_read_motd(void)
 				char * ptr;
 				buf[len] = 0;
 				if( ( ptr = strstr(buf, " :") ) != NULL && ptr-buf >= NAME_LENGTH ) // crashes newer clients
-					ShowWarning("Found sequence '"CL_WHITE" :"CL_RESET"' on line '"CL_WHITE"%u"CL_RESET"' in '"CL_WHITE"%s"CL_RESET"'. This can cause newer clients to crash.\n", lines, StringBuf_Value(map_config.motd_txt));
+					ShowWarning("Found sequence '"CL_WHITE" :"CL_RESET"' on line '"CL_WHITE"%u"CL_RESET"' in '"CL_WHITE"%s"CL_RESET"'. This can cause newer clients to crash.\n", lines, motd_file);
 			}
 			else {// empty line
 				buf[0] = ' ';
@@ -10745,10 +10746,10 @@ int pc_read_motd(void)
 			entries++;
 		}
 		fclose(fp);
-		ShowStatus("Done reading '"CL_WHITE"%u"CL_RESET"' entries in '"CL_WHITE"%s"CL_RESET"'.\n", entries, StringBuf_Value(map_config.motd_txt));
+		ShowStatus("Done reading '"CL_WHITE"%u"CL_RESET"' entries in '"CL_WHITE"%s"CL_RESET"'.\n", entries, motd_file);
 	}
 	else
-		ShowWarning("File '"CL_WHITE"%s"CL_RESET"' not found.\n", StringBuf_Value(map_config.motd_txt));
+		ShowWarning("File '"CL_WHITE"%s"CL_RESET"' not found.\n", motd_file);
 
 	return 0;
 }

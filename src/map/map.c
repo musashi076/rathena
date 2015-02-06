@@ -55,6 +55,10 @@ struct MapServer_Schema mapserv_schema_config; /// map-server tables
 static void map_schema_init(void);
 static void map_schema_final(void);
 
+struct MapServer_File mapserv_file_config; /// Sub files needed for map-server
+static void map_file_init(void);
+static void map_file_final(void);
+
 // DBMap declaration
 static DBMap* id_db=NULL; /// int id -> struct block_list*
 static DBMap* pc_db=NULL; /// int id -> struct map_session_data*
@@ -3579,7 +3583,11 @@ int map_config_read(char *cfgName)
 		} else if (strcmpi(w1, "save_settings") == 0)
 			map_config.save_settings = cap_value(atoi(w2),CHARSAVE_NONE,CHARSAVE_ALL);
 		else if (strcmpi(w1, "motd_txt") == 0)
-			StringBuf_PrintfClear(map_config.motd_txt, "%s", w2);
+			StringBuf_PrintfClear(mapserv_file_config.motd, "%s", w2);
+		else if (strcmpi(w1, "group_conf_file") == 0)
+			StringBuf_PrintfClear(mapserv_file_config.group, "%s", w2);
+		else if (strcmpi(w1, "atcommand_conf_file") == 0)
+			StringBuf_PrintfClear(mapserv_file_config.atcommand, "%s", w2);
 		else if(strcmpi(w1,"db_path") == 0)
 			safestrncpy(db_path,w2,ARRAYLENGTH(db_path));
 		else if (strcmpi(w1, "console") == 0) {
@@ -3675,8 +3683,6 @@ static void map_inter_config_init(void) {
 	map_config.log_db_pw   = StringBuf_FromStr("");
 	map_config.log_db_db   = StringBuf_FromStr("log");
 
-	map_config.motd_txt = StringBuf_FromStr("conf/motd.txt");
-
 	safestrncpy(map_config.wisp_server_name, "Server", sizeof(map_config.wisp_server_name));
 
 	map_config.autosave_interval = DEFAULT_AUTOSAVE_INTERVAL;
@@ -3705,7 +3711,6 @@ static void map_inter_config_final(void) {
 	StringBuf_Free(map_config.log_db_id);
 	StringBuf_Free(map_config.log_db_pw);
 	StringBuf_Free(map_config.log_db_db);
-	StringBuf_Free(map_config.motd_txt);
 }
 
 /**
@@ -3750,6 +3755,24 @@ static void map_schema_final(void) {
 	StringBuf_Free(mapserv_schema_config.mob_skill_db2_table);
 	StringBuf_Free(mapserv_schema_config.vendings_table);
 	StringBuf_Free(mapserv_schema_config.vending_items_table);
+}
+
+/**
+ * Initialize default map-server files
+ **/
+static void map_file_init(void) {
+	mapserv_file_config.group     = StringBuf_FromStr("conf/groups.conf");
+	mapserv_file_config.atcommand = StringBuf_FromStr("conf/atcommand_athena.conf");
+	mapserv_file_config.motd      = StringBuf_FromStr("conf/motd.txt");
+}
+
+/**
+ * Finalize map-server files
+ **/
+static void map_file_final(void) {
+	StringBuf_Free(mapserv_file_config.group);
+	StringBuf_Free(mapserv_file_config.atcommand);
+	StringBuf_Free(mapserv_file_config.motd);
 }
 
 /**
@@ -4324,6 +4347,7 @@ void do_final(void)
 
 	map_inter_config_final();
 	map_schema_final();
+	map_file_final();
 	log_config_final();
 	map_sql_close();
 
@@ -4503,7 +4527,6 @@ int do_init(int argc, char *argv[])
 	LOG_CONF_NAME="conf/log_athena.conf";
 	MAP_CONF_NAME = "conf/map_athena.conf";
 	BATTLE_CONF_FILENAME = "conf/battle_athena.conf";
-	ATCOMMAND_CONF_FILENAME = "conf/atcommand_athena.conf";
 	SCRIPT_CONF_NAME = "conf/script_athena.conf";
 	GRF_PATH_FILENAME = "conf/grf-files.txt";
 
@@ -4525,6 +4548,7 @@ int do_init(int argc, char *argv[])
 	rnd_init();
 	map_inter_config_init();
 	map_schema_init();
+	map_file_init();
 	log_config_init();
 
 	map_config_read(MAP_CONF_NAME);
