@@ -22,68 +22,68 @@
 //= 	val4: <usage for>
 //============================================================
 
-SC_STONE	()
-	desc:
+SC_STONE()
+	desc: DEF -50%; if HP>25% lose 1% HP/5 sec; MDEF +25%; change element to Earth Lv 1; ignore Steal & Lex Aeterna; can't move/attack/pick item/use item/use skill/sit/logout
 	val1:
 
-SC_FREEZE	()
-	desc:
+SC_FREEZE()
+	desc: DEF -50%; FLEE = 0; MDEF +25%; ignore Steal, Lex Aeterna, Storm Gust, Falling Ice Pillar; change element to Water Lv 1; can't move/attack/pick item/use item/sit/logout
 	val1:
 
-SC_STUN	()
-	desc:
+SC_STUN()
+	desc: FLEE = 0; can't move/attack/pick item/use item/use skill/sit/logout
 	val1:
 
-SC_SLEEP	()
-	desc:
+SC_SLEEP()
+	desc: FLEE = 0; enemy CRIT x2; can't move/attack/pick item/use item/use skill/sit/logout
 	val1:
 
-SC_POISON	()
-	desc:
+SC_POISON()
+	desc: DEF -25%; if HP>25% lose 1.5% + 2 HP/sec; SP Regeneration is disabled
 	val1:
 
-SC_CURSE	()
-	desc:
+SC_CURSE()
+	desc: ATK-25%; LUK = 0; Movement speed -300
 	val1:
 
-SC_SILENCE	()
-	desc:
+SC_SILENCE()
+	desc: Can't use active skills
 	val1:
 
-SC_CONFUSION	()
-	desc:
+SC_CONFUSION()
+	desc: Move randomly
 	val1:
 
-SC_BLIND	()
-	desc:
+SC_BLIND()
+	desc: HIT -25%; FLEE -25%; Black out the outter part of the screen
 	val1:
 
 SC_BLEEDING	()
-	desc:
+	desc: HP Regeneration is disabled; SP Regeneration is disabled; Lose HP overtime
 	val1:
 
-SC_DPOISON	()
-	desc:
+SC_DPOISON()
+	desc: DEF -25%; if HP>25% lose 10/15% HP/sec
 	val1:
 
-SC_PROVOKE	()
-	desc:
+SC_PROVOKE()
+	desc: Decrease DEF by (5+(5*Skill Lv))%; Increase ATK by (2+(3*Skill lv))%
 	val1:
 
-SC_ENDURE	()
-	desc:
+SC_ENDURE()
+	desc: Increase MDEF by (Skill Lv); Doesn't get flinched when attacked
 	val1:
 
-SC_TWOHANDQUICKEN	()
-	desc:
+SC_TWOHANDQUICKEN()
+	desc: ASPD +30%
 	val1:
 
-SC_CONCENTRATE	()
-	desc:
+SC_CONCENTRATE()
+	desc: Increase AGI by (2+Skill Lv)%; Increase DEX by (2+Skill Lv)%; Reveal hidden enemies in 3x3 area around caster
 	val1:
 
 SC_HIDING	()
-	desc:
+	desc: Set OPTION_HIDE
 	val1:
 
 SC_CLOAKING	()
