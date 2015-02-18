@@ -195,15 +195,15 @@ SC_BROKENWEAPON	(SC_BROKENWEAPON)
 	val1:
 
 SC_HALLUCINATION	(SI_HALLUCINATION)
-	desc: 
+	desc: The screen goes wavy and you see crazy numbers for all damage that is processed around you, but they are all fake. Even other players see those numbers at you.
 	val1:
 
 SC_WEIGHT50	(SI_WEIGHT50)
-	desc: Shows SI_WEIGHT50 status if Weight >= 50%
+	desc: Shows SI_WEIGHT50 status icon if Weight >= 50%
 	val1:
 
 SC_WEIGHT90	(SI_WEIGHT90)
-	desc: Shows SI_WEIGHT90 status if Weight >= 90%
+	desc: Shows SI_WEIGHT90 status icon if Weight >= 90%
 	val1:
 
 SC_ASPDPOTION0	(SI_ASPDPOTION0)
@@ -278,44 +278,44 @@ SC_STRIPHELM	(SI_STRIPHELM)
 	desc: Unequip helm; On mob INT -40%
 	val1:
 
-SC_CP_WEAPON	()
-	desc:
+SC_CP_WEAPON	(SI_CP_WEAPON)
+	desc: Protects equipped weapon from damage and strip skill
 	val1:
 
-SC_CP_SHIELD	()
-	desc:
+SC_CP_SHIELD	(SI_CP_SHIELD)
+	desc: Protects equipped shield from damage and strip skill
 	val1:
 
-SC_CP_ARMOR	()
-	desc:
+SC_CP_ARMOR	(SI_CP_ARMOR)
+	desc: Protects equipped armor from damage and strip skill
 	val1:
 
-SC_CP_HELM	()
-	desc:
+SC_CP_HELM	(SI_CP_HELM)
+	desc: Protects equipped helm from damage and strip skill
 	val1:
 
-SC_AUTOGUARD	()
-	desc:
+SC_AUTOGUARD	(SI_AUTOGUARD)
+	desc: Blocks short and long range physical attacks at a certain chance, and stops the caster for 0.3 seconds if it's activated
 	val1:
 
-SC_REFLECTSHIELD	()
-	desc:
+SC_REFLECTSHIELD	(SI_REFLECTSHIELD)
+	desc: Reflects (10+(3*Skill Lv))% of short ranged physical attack back to the attacker
 	val1:
 
-SC_SPLASHER	()
-	desc:
+SC_SPLASHER	(SI_SPLASHER)
+	desc: This skill will only work once the target's HP is 1/3 or less of its Max HP. When struck by this skill, the target will explode and damage other enemies in it's vicinity
 	val1:
 
-SC_PROVIDENCE	()
-	desc:
+SC_PROVIDENCE	(SI_PROVIDENCE)
+	desc: Increase party members' resistance to RC_Demon and Ele_Holy monsters
 	val1:
 
-SC_DEFENDER	()
-	desc:
+SC_DEFENDER	(SI_DEFENDER)
+	desc: Decrease (5+(15*Skill Lv))% damage taken from long range attack; Decrease (25+(5*Skill Lv)) ASPD
 	val1:
 
-SC_MAGICROD	()
-	desc:
+SC_MAGICROD	(SI_MAGICROD)
+	desc: Gain (Skill Lv*20)% of SP consumed by the skill used from enemy; Damage received becomes 0; Drain 20% of enemy's Max SP
 	val1:
 
 SC_SPELLBREAKER	()
