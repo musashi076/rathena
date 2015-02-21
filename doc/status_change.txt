@@ -319,47 +319,47 @@ SC_MAGICROD	(SI_MAGICROD)
 	val1:
 
 SC_SPELLBREAKER	()
-	desc:
+	desc: Gain SP used by enemy to cast the spell, and interrupt the magic cast. At lv 5, gain 1% from enemy max hp.
 	val1:
 
-SC_AUTOSPELL	()
-	desc:
+SC_AUTOSPELL	(SI_AUTOSPELL)
+	desc: Auto cast several learned magic spells by using 2/3 of SP cost of the skill, but only when attacking with physical attacks.
 	val1:
 
 SC_SIGHTTRASHER	()
-	desc:
+	desc: (not exist)
 	val1:
 
-SC_AUTOBERSERK	()
-	desc:
+SC_AUTOBERSERK	(SI_AUTOBERSERK)
+	desc: If HP<25%, set SC_PROVOKE lv 10 on self
 	val1:
 
-SC_SPEARQUICKEN	()
-	desc:
+SC_SPEARQUICKEN	(SI_SPEARQUICKEN)
+	desc: When using spear, +ASPD (20+(1*Skill Lv))%, +CRIT (3+(10*Skill Lv)), +FLEE (2*Skill Lv)
 	val1:
 
-SC_AUTOCOUNTER	()
-	desc:
+SC_AUTOCOUNTER	(SI_AUTOCOUNTER)
+	desc: Hitrate +20%; If attacked by close range, automatically retaliate with crit*2
 	val1:
 
 SC_SIGHT	()
-	desc:
+	desc: Reveal hidden enemy on 3*3 range; Set OPTION_SIGHT
 	val1:
 
 SC_SAFETYWALL	()
-	desc:
+	desc: Block short ranged attack; Set OPTION_RUWACH
 	val1:
 
 SC_RUWACH	()
-	desc:
+	desc: Reveal hidden target and deal little damages if enemy is under SC_HIDING/SC_CLOAKING/SC_CAMOUFLAGE/SC_CLOAKINGEXCEED; Set OPTION_RUWACH
 	val1:
 
-SC_EXTREMITYFIST	()
-	desc:
+SC_EXTREMITYFIST	(SI_EXTREMITYFIST)
+	desc: Stop SP Regeneration by setting RGN_SP
 	val1:
 
-SC_EXPLOSIONSPIRITS	()
-	desc:
+SC_EXPLOSIONSPIRITS	(SI_EXPLOSIONSPIRITS)
+	desc: Stop SP Regeneration by setting RGN_SP; +Crit
 	val1:
 
 SC_COMBO	()
@@ -370,8 +370,8 @@ SC_BLADESTOP_WAIT	()
 	desc:
 	val1:
 
-SC_BLADESTOP	()
-	desc:
+SC_BLADESTOP	(SI_BLADESTOP)
+	desc: Stops player and target; Set OPT3_BLADESTOP
 	val1:
 
 SC_FIREWEAPON	(SI_FIREWEAPON)
@@ -390,24 +390,24 @@ SC_EARTHWEAPON	(SI_EARTHWEAPON)
 	desc: Change weapon element to Earth element
 	val1:
 
-SC_VOLCANO	()
-	desc:
+SC_VOLCANO	(SI_LANDENDOW)
+	desc: +watk of ELE_FIRE user
 	val1:
 
-SC_DELUGE	()
-	desc:
+SC_DELUGE	(SI_LANDENDOW)
+	desc: +Max HP of ELE_WATER user
 	val1:
 
-SC_VIOLENTGALE	()
-	desc:
+SC_VIOLENTGALE	(SI_LANDENDOW)
+	desc: +FLEE of ELE_WIND user
 	val1:
 
 SC_WATK_ELEMENT	()
-	desc:
+	desc: Adds a percent of damage as an element
 	val1:
 
 SC_ARMOR	()
-	desc:
+	desc: Reduce damage received by 80 from long ranged weapon/misc attacks
 	val1:
 
 SC_ARMOR_ELEMENT	()
@@ -418,39 +418,48 @@ SC_ARMOR_ELEMENT	()
 	val4: Wind resistance
 
 SC_NOCHAT	()
+	desc: Can't chat, pick item, drop item
+	val1:
+
+SC_BABY	(SI_BABY)
 	desc:
 	val1:
 
-SC_BABY	()
-	desc:
+SC_AURABLADE	(SI_AURABLADE)
+	desc: Set OPT3_AURABLADE; Add damage by (20*Skill Lv) which ignore caster's accuracy rate/target's DEF
 	val1:
 
-SC_AURABLADE	()
-	desc:
+SC_PARRYING	(SI_PARRYING)
+	desc: Block using a 2H-Sword with chance (20+(3*Skill Lv))%
 	val1:
 
-SC_PARRYING	()
-	desc:
+SC_CONCENTRATION	(SI_CONCENTRATION)
+	desc: Lv 1 Endurace effect; +WATK; +HIT; -DEF
 	val1:
+	val2: 5*val1;		// Batk/Watk Increase
+	val3: 10*val1;	// Hit Increase
+	val4: 5*val1;		// Def reduction
 
-SC_CONCENTRATION	()
-	desc:
+SC_TENSIONRELAX	(SI_TENSIONRELAX)
+	desc: Increase HP regeneration rate while sitting
 	val1:
+	val2: 12;		// SP cost
+	val3: tick/val4;
+	val4: 10000;	// Decrease at 10secs intervals.
 
-SC_TENSIONRELAX	()
-	desc:
+SC_BERSERK	(SI_BERSERK)
+	desc: Stop HP+SP Regen; Can't use skill; Can't chat; -FLEE; +Max HP; +Movement Speed; +ATK; Set OPT3_BERSERK; -5%HP per 10 second; Set DEF+MDEF to 0
 	val1:
-
-SC_BERSERK	()
-	desc:
-	val1:
+	val2: HP Penalty (5% of Max HP)
+	val3: Skill duration
+	val4: Interval of HP Penalty
 
 SC_FURY	()
 	desc:
 	val1:
 
-SC_GOSPEL	()
-	desc:
+SC_GOSPEL	(SI_GOSPEL)
+	desc: Can't move; Gives a random status to party member and also enemy.
 	val1:
 
 SC_ASSUMPTIO	(RE: SI_ASSUMPTIO2. Pre-RE: SI_ASSUMPTIO)
@@ -458,50 +467,57 @@ SC_ASSUMPTIO	(RE: SI_ASSUMPTIO2. Pre-RE: SI_ASSUMPTIO)
 	val1: Level (unused)
 
 SC_BASILICA	()
-	desc:
+	desc: Can't move; Can't use skill except the Basilica caster to cancel the basilica itself; Clear the skill area; Knockback enemy except Boss
 	val1:
 
 SC_GUILDAURA	()
 	desc:
 	val1:
 
-SC_MAGICPOWER	()
+SC_MAGICPOWER	(SI_MAGICPOWER)
+	desc: +MATK by (Skill Lv*5)% for the next magic skill that is cast
+	val1:
+
+SC_EDP	(SI_EDP)
+	desc: +WATK by (100+(Skill Lv*80))
+	val1: Skill Lv
+	val2: Chance to Poison enemy (val1+2)%
+	val3: Damage increased by (50*(val1+1))
+
+SC_TRUESIGHT	(SI_TRUESIGHT)
+	desc: All stat +5; Damage +(2*Skill Lv)%; Crit +(Skill Lv); Hit +(3*Skill Lv)%
+	val1: Skill Lv
+	val2: Crit
+	val3: Hit
+
+SC_WINDWALK	(SI_WINDWALK)
+	desc: +Flee; +Movement speed
+	val1: Skill Lv
+	val2: Flee
+
+SC_MELTDOWN	(SI_MELTDOWN)
+	desc: Breaks target's weapon and armor at a certain chance
+	val1: Skill Lv
+	val2: Chance to break weapon (100*Skill Lv)
+	val3: Change to break armor (70*Skill Lv)
+
+SC_CARTBOOST	(SI_CARTBOOST)
 	desc:
 	val1:
 
-SC_EDP	()
+SC_CHASEWALK	(SI_CHASEWALK)
 	desc:
 	val1:
 
-SC_TRUESIGHT	()
+SC_REJECTSWORD	(SI_REJECTSWORD)
 	desc:
 	val1:
 
-SC_WINDWALK	()
+SC_MARIONETTE	(SI_MARIONETTE)
 	desc:
 	val1:
 
-SC_MELTDOWN	()
-	desc:
-	val1:
-
-SC_CARTBOOST	()
-	desc:
-	val1:
-
-SC_CHASEWALK	()
-	desc:
-	val1:
-
-SC_REJECTSWORD	()
-	desc:
-	val1:
-
-SC_MARIONETTE	()
-	desc:
-	val1:
-
-SC_MARIONETTE2	()
+SC_MARIONETTE2	(SI_MARIONETTE2)
 	desc:
 	val1:
 
@@ -513,23 +529,23 @@ SC_JOINTBEAT	()
 	desc:
 	val1:
 
-SC_MINDBREAKER	()
+SC_MINDBREAKER	(SI_MINDBREAKER)
 	desc:
 	val1:
 
-SC_MEMORIZE	()
+SC_MEMORIZE	(SI_MEMORIZE)
 	desc:
 	val1:
 
-SC_FOGWALL	()
+SC_FOGWALL	(SI_FOGWALL)
 	desc:
 	val1:
 
-SC_SPIDERWEB	()
+SC_SPIDERWEB	(SI_SPIDERWEB)
 	desc:
 	val1:
 
-SC_DEVOTION	()
+SC_DEVOTION	(SI_DEVOTION)
 	desc:
 	val1:
 
