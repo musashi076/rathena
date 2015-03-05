@@ -2134,7 +2134,7 @@ bool char_checkdb(void){
 		charserv_table(inventory_table), charserv_table(memo_table), charserv_table(scdata_table), charserv_table(skill_table),
 		charserv_table(skillcooldown_table), charserv_table(storage_table), charserv_table(friend_table), charserv_table(hotkey_table),
 		charserv_table(mail_table), charserv_table(quest_table), charserv_table(pet_table), charserv_table(elemental_table),
-		charserv_table(party_table), charserv_table(homunculus_table), charserv_table(skill_homunculus_table), charserv_table(mercenary_table),
+		charserv_table(party_table), charserv_table(homunculus_table), charserv_table(homunculus_skill_table), charserv_table(mercenary_table),
 		charserv_table(mercenary_owner_table), charserv_table(guild_table), charserv_table(guild_alliance_table),
 		charserv_table(guild_castle_table), charserv_table(guild_expulsion_table), charserv_table(guild_member_table),
 		charserv_table(guild_position_table), charserv_table(guild_skill_table), charserv_table(guild_storage_table),
@@ -2307,7 +2307,7 @@ bool char_checkdb(void){
 		return false;
 	}
 	//checking skill_homunculus_db
-	if( SQL_ERROR == Sql_Query(sql_handle, "SELECT `homun_id`,`id`,`lv` FROM `%s`;", charserv_table(skill_homunculus_table)) ){
+	if( SQL_ERROR == Sql_Query(sql_handle, "SELECT `homun_id`,`id`,`lv` FROM `%s`;", charserv_table(homunculus_skill_table)) ){
 		Sql_ShowDebug(sql_handle);
 		return false;
 	}
@@ -2379,98 +2379,54 @@ bool char_checkdb(void){
 	return true;
 }
 
-void char_sql_config_read(const char* cfgName) {
-	char line[1024];
-	FILE* fp;
+/**
+ * Get table names
+ * @param w1 Config name
+ * @param w2 Config value
+ **/
+static bool char_schema_config_read(const char *w1, const char *w2) {
+#define SCHEMA_CONF(var,str) \
+	if (!strcmpi(w1,(str))) {\
+		StringBuf_PrintfClear(schema_config.var, "%s", w2);\
+		return true;\
+	}\
 
-	if ((fp = fopen(cfgName, "r")) == NULL) {
-		ShowError("File not found: %s\n", cfgName);
-		return;
-	}
+	SCHEMA_CONF(auction_table, "auction_table")
+	SCHEMA_CONF(bonus_script_table, "bonus_script_table")
+	SCHEMA_CONF(cart_table, "cart_table")
+	SCHEMA_CONF(char_table, "char_table")
+	SCHEMA_CONF(charlog_table, "charlog_table")
+	SCHEMA_CONF(elemental_table, "elemental_table")
+	SCHEMA_CONF(friend_table, "friend_table")
+	SCHEMA_CONF(guild_table, "guild_table")
+	SCHEMA_CONF(guild_alliance_table, "guild_alliance_table")
+	SCHEMA_CONF(guild_castle_table, "guild_castle_table")
+	SCHEMA_CONF(guild_expulsion_table, "guild_expulsion_table")
+	SCHEMA_CONF(guild_member_table, "guild_member_table")
+	SCHEMA_CONF(guild_position_table, "guild_position_table")
+	SCHEMA_CONF(guild_skill_table, "guild_skill_table")
+	SCHEMA_CONF(guild_storage_table, "guild_storage_table")
+	SCHEMA_CONF(hotkey_table, "hotkey_table")
+	SCHEMA_CONF(homunculus_table, "homunculus_table")
+	SCHEMA_CONF(homunculus_skill_table, "homunculus_skill_table")
+	SCHEMA_CONF(interlog_table, "interlog_table")
+	SCHEMA_CONF(inventory_table, "inventory_table")
+	SCHEMA_CONF(mail_table, "mail_table")
+	SCHEMA_CONF(memo_table, "memo_table")
+	SCHEMA_CONF(mercenary_table, "mercenary_table")
+	SCHEMA_CONF(mercenary_owner_table, "mercenary_owner_table")
+	SCHEMA_CONF(party_table, "party_table")
+	SCHEMA_CONF(pet_table, "pet_table")
+	SCHEMA_CONF(quest_table, "quest_table")
+	SCHEMA_CONF(ragsrvinfo_table, "ragsrvinfo_table")
+	SCHEMA_CONF(reg_table, "reg_table")
+	SCHEMA_CONF(scdata_table, "scdata_table")
+	SCHEMA_CONF(skill_table, "skill_table")
+	SCHEMA_CONF(skillcooldown_table, "skillcooldown_table")
+	SCHEMA_CONF(storage_table, "storage_table")
 
-	while(fgets(line, sizeof(line), fp)) {
-		char w1[32], w2[32];
-		if(line[0] == '/' && line[1] == '/')
-			continue;
-
-		if (sscanf(line, "%31[^:]: %31[^\r\n]", w1, w2) != 2)
-			continue;
-
-		if(!strcmpi(w1,"char_table"))
-			StringBuf_PrintfClear(schema_config.char_table, "%s", w2);
-		else if(!strcmpi(w1,"scdata_table"))
-			StringBuf_PrintfClear(schema_config.scdata_table, "%s", w2);
-		else if(!strcmpi(w1,"cart_table"))
-			StringBuf_PrintfClear(schema_config.cart_table, "%s", w2);
-		else if(!strcmpi(w1,"inventory_table"))
-			StringBuf_PrintfClear(schema_config.inventory_table, "%s", w2);
-		else if(!strcmpi(w1,"charlog_table"))
-			StringBuf_PrintfClear(schema_config.charlog_table, "%s", w2);
-		else if(!strcmpi(w1,"storage_table"))
-			StringBuf_PrintfClear(schema_config.storage_table, "%s", w2);
-		else if(!strcmpi(w1,"reg_table"))
-			StringBuf_PrintfClear(schema_config.reg_table, "%s", w2);
-		else if(!strcmpi(w1,"skill_table"))
-			StringBuf_PrintfClear(schema_config.skill_table, "%s", w2);
-		else if(!strcmpi(w1,"interlog_table"))
-			StringBuf_PrintfClear(schema_config.interlog_table, "%s", w2);
-		else if(!strcmpi(w1,"memo_table"))
-			StringBuf_PrintfClear(schema_config.memo_table, "%s", w2);
-		else if(!strcmpi(w1,"guild_table"))
-			StringBuf_PrintfClear(schema_config.guild_table, "%s", w2);
-		else if(!strcmpi(w1,"guild_alliance_table"))
-			StringBuf_PrintfClear(schema_config.guild_alliance_table, "%s", w2);
-		else if(!strcmpi(w1,"guild_castle_table"))
-			StringBuf_PrintfClear(schema_config.guild_castle_table, "%s", w2);
-		else if(!strcmpi(w1,"guild_expulsion_table"))
-			StringBuf_PrintfClear(schema_config.guild_expulsion_table, "%s", w2);
-		else if(!strcmpi(w1,"guild_member_table"))
-			StringBuf_PrintfClear(schema_config.guild_member_table, "%s", w2);
-		else if(!strcmpi(w1,"guild_skill_table"))
-			StringBuf_PrintfClear(schema_config.guild_skill_table, "%s", w2);
-		else if(!strcmpi(w1,"guild_position_table"))
-			StringBuf_PrintfClear(schema_config.guild_position_table, "%s", w2);
-		else if(!strcmpi(w1,"guild_storage_table"))
-			StringBuf_PrintfClear(schema_config.guild_storage_table, "%s", w2);
-		else if(!strcmpi(w1,"party_table"))
-			StringBuf_PrintfClear(schema_config.party_table, "%s", w2);
-		else if(!strcmpi(w1,"pet_table"))
-			StringBuf_PrintfClear(schema_config.pet_table, "%s", w2);
-		else if(!strcmpi(w1,"mail_table"))
-			StringBuf_PrintfClear(schema_config.mail_table, "%s", w2);
-		else if(!strcmpi(w1,"auction_table"))
-			StringBuf_PrintfClear(schema_config.auction_table, "%s", w2);
-		else if(!strcmpi(w1,"friend_table"))
-			StringBuf_PrintfClear(schema_config.friend_table, "%s", w2);
-		else if(!strcmpi(w1,"hotkey_table"))
-			StringBuf_PrintfClear(schema_config.hotkey_table, "%s", w2);
-		else if(!strcmpi(w1,"quest_table"))
-			StringBuf_PrintfClear(schema_config.quest_table, "%s", w2);
-		else if(!strcmpi(w1,"homunculus_table"))
-			StringBuf_PrintfClear(schema_config.homunculus_table, "%s", w2);
-		else if(!strcmpi(w1,"skill_homunculus_table"))
-			StringBuf_PrintfClear(schema_config.skill_homunculus_table, "%s", w2);
-		else if(!strcmpi(w1,"mercenary_table"))
-			StringBuf_PrintfClear(schema_config.mercenary_table, "%s", w2);
-		else if(!strcmpi(w1,"mercenary_owner_table"))
-			StringBuf_PrintfClear(schema_config.mercenary_owner_table, "%s", w2);
-		else if(!strcmpi(w1,"elemental_table"))
-			StringBuf_PrintfClear(schema_config.elemental_table, "%s", w2);
-		else if(!strcmpi(w1,"skillcooldown_table"))
-			StringBuf_PrintfClear(schema_config.skillcooldown_table, "%s", w2);
-		else if(!strcmpi(w1,"bonus_script_table"))
-			StringBuf_PrintfClear(schema_config.bonus_script_table, "%s", w2);
-		//support the import command, just like any other config
-		else if(!strcmpi(w1,"import"))
-			char_sql_config_read(w2);
-	}
-	fclose(fp);
-	ShowInfo("Done reading %s.\n", cfgName);
-}
-
-
-void char_set_default_sql(void) {
-	;
+	return false;
+#undef SCHEMA_CONF
 }
 
 //set default config
@@ -2589,6 +2545,10 @@ bool char_config_read(const char* cfgName, bool normal){
 			} else if (strcmpi(w1, "console") == 0) {
 				charserv_config.console = config_switch(w2);
 			}
+
+			// Read table names
+			if (char_schema_config_read(w1, w2))
+				continue;
 		}
 
 		if(strcmpi(w1,"timestamp_format") == 0) {
@@ -2750,7 +2710,7 @@ static void char_schema_config_init(void) {
 
 	// Homunculus tables
 	schema_config.homunculus_table		 = StringBuf_FromStr("homunculus");
-	schema_config.skill_homunculus_table = StringBuf_FromStr("skill_homunculus");
+	schema_config.homunculus_skill_table = StringBuf_FromStr("skill_homunculus");
 
 	// Mercenary Tables
 	schema_config.mercenary_table		 = StringBuf_FromStr("mercenary");
@@ -2793,7 +2753,7 @@ static void char_schema_config_final(void) {
 	StringBuf_Free(schema_config.party_table);
 
 	StringBuf_Free(schema_config.homunculus_table);
-	StringBuf_Free(schema_config.skill_homunculus_table);
+	StringBuf_Free(schema_config.homunculus_skill_table);
 
 	StringBuf_Free(schema_config.mercenary_table);
 	StringBuf_Free(schema_config.mercenary_owner_table);
@@ -2908,11 +2868,9 @@ int do_init(int argc, char **argv)
 	cli_get_options(argc,argv);
 
 	char_set_defaults();
+	char_schema_config_init();
 	char_config_read(CHAR_CONF_NAME, true);
 	char_lan_config_read(LAN_CONF_NAME);
-	char_set_default_sql();
-	char_schema_config_init();
-	char_sql_config_read(SQL_CONF_NAME);
 	msg_config_read(MSG_CONF_NAME_EN);
 
 	if (strcmp(charserv_config.userid, "s1")==0 && strcmp(charserv_config.passwd, "p1")==0) {

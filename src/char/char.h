@@ -52,7 +52,7 @@ struct Schema_Config {
 
 	// Homunculus tables
 	StringBuf *homunculus_table;	   ///< Homunculus table
-	StringBuf *skill_homunculus_table; ///< Homunculus skill table
+	StringBuf *homunculus_skill_table; ///< Homunculus skill table
 
 	// Mercenary Tables
 	StringBuf *mercenary_table;		   ///< Mercenary table

@@ -3507,6 +3507,47 @@ int parse_console(const char* buf){
 	return 0;
 }
 
+/**
+ * Get table names
+ * @param w1 Config name
+ * @param w2 Config value
+ **/
+static bool map_schema_read_conf(const char *w1, const char *w2) {
+#define SCHEMA_CONF(var,str) \
+	if (!strcmpi(w1,(str))) {\
+		StringBuf_PrintfClear(mapserv_schema_config.var, "%s", w2);\
+		return true;\
+	}\
+
+	if (strcmpi(w1,"use_sql_db")==0) {
+		mapserv_schema_config.db_use_sqldbs = config_switch(w2);
+		ShowStatus ("Using SQL dbs: %s\n",w2);
+		return true;
+	}
+
+	SCHEMA_CONF(buyingstores_table, "buyingstore_table")
+	SCHEMA_CONF(buyingstore_items_table, "buyingstore_items_table")
+	SCHEMA_CONF(mapreg_table, "mapreg_table")
+	SCHEMA_CONF(vendings_table, "vending_table")
+	SCHEMA_CONF(vending_items_table, "vending_items_table")
+
+	// TXT -> SQL DB
+	SCHEMA_CONF(item_db_table, "item_db_table")
+	SCHEMA_CONF(item_db_re_table, "item_db_re_table")
+	SCHEMA_CONF(item_db2_table, "item_db2_table")
+	SCHEMA_CONF(mob_db_table, "mob_db_table")
+	SCHEMA_CONF(mob_db_re_table, "mob_db_re_table")
+	SCHEMA_CONF(mob_db2_table, "mob_db2_table")
+	SCHEMA_CONF(mob_skill_db_table, "mob_skill_db_table")
+	SCHEMA_CONF(mob_skill_db_re_table, "mob_skill_db_re_table")
+	SCHEMA_CONF(mob_skill_db2_table, "mob_skill_db2_table")
+	SCHEMA_CONF(item_cash_db_table, "item_cash_db_table")
+	SCHEMA_CONF(item_cash_db2_table, "item_cash_db2_table")
+
+	return false;
+#undef SCHEMA_CONF
+}
+
 /*==========================================
  * Read map server configuration files (conf/map_athena.conf...)
  *------------------------------------------*/
@@ -3602,6 +3643,8 @@ int map_config_read(char *cfgName)
 			console_msg_log = atoi(w2);//[Ind]
 		else if (strcmpi(w1,"check_tables") == 0)
 			map_config.check_tables = config_switch(w2);
+		else if (map_schema_read_conf(w1, w2))
+			continue;
 		else if (strcmpi(w1, "import") == 0)
 			map_config_read(w2);
 		else
@@ -3734,6 +3777,7 @@ static void map_schema_init(void) {
 	mapserv_schema_config.mob_skill_db2_table     = StringBuf_FromStr("mob_skill_db2");
 	mapserv_schema_config.vendings_table          = StringBuf_FromStr("vendings");
 	mapserv_schema_config.vending_items_table     = StringBuf_FromStr("vending_items");
+	mapserv_schema_config.mapreg_table            = StringBuf_FromStr("mapreg");
 }
 
 /**
@@ -3755,6 +3799,7 @@ static void map_schema_final(void) {
 	StringBuf_Free(mapserv_schema_config.mob_skill_db2_table);
 	StringBuf_Free(mapserv_schema_config.vendings_table);
 	StringBuf_Free(mapserv_schema_config.vending_items_table);
+	StringBuf_Free(mapserv_schema_config.mapreg_table);
 }
 
 /**
@@ -3786,6 +3831,7 @@ static bool map_check_tables(void) {
 		mapserv_table(buyingstore_items_table),
 		mapserv_table(vendings_table),
 		mapserv_table(vending_items_table),
+		mapserv_table(mapreg_table),
 	};
 
 	ShowInfo("Start checking DB integrity\n");
@@ -3934,37 +3980,6 @@ int map_inter_config_read(char *cfgName)
 		if( sscanf(line,"%31[^:]: %31[^\r\n]",w1,w2) < 2 )
 			continue;
 
-		if( strcmpi( w1, "buyingstore_table" ) == 0 )
-			StringBuf_PrintfClear(mapserv_schema_config.buyingstores_table, "%s", w2);
-		else if( strcmpi( w1, "buyingstore_items_table" ) == 0 )
-			StringBuf_PrintfClear(mapserv_schema_config.buyingstore_items_table, "%s", w2);
-		else if(strcmpi(w1,"item_db_table")==0)
-			StringBuf_PrintfClear(mapserv_schema_config.item_db_table, "%s", w2);
-		else if(strcmpi(w1,"item_db2_table")==0)
-			StringBuf_PrintfClear(mapserv_schema_config.item_db2_table, "%s", w2);
-		else if(strcmpi(w1,"item_db_re_table")==0)
-			StringBuf_PrintfClear(mapserv_schema_config.item_db_re_table, "%s", w2);
-		else if(strcmpi(w1,"mob_db_table")==0)
-			StringBuf_PrintfClear(mapserv_schema_config.mob_db_table, "%s", w2);
-		else if(strcmpi(w1,"mob_db_re_table")==0)
-			StringBuf_PrintfClear(mapserv_schema_config.mob_db_re_table, "%s", w2);
-		else if(strcmpi(w1,"mob_db2_table")==0)
-			StringBuf_PrintfClear(mapserv_schema_config.mob_db2_table, "%s", w2);
-		else if(strcmpi(w1,"mob_skill_db_table")==0)
-			StringBuf_PrintfClear(mapserv_schema_config.mob_skill_db_table, "%s", w2);
-		else if(strcmpi(w1,"mob_skill_db_re_table")==0)
-			StringBuf_PrintfClear(mapserv_schema_config.mob_skill_db_re_table, "%s", w2);
-		else if(strcmpi(w1,"mob_skill_db2_table")==0)
-			StringBuf_PrintfClear(mapserv_schema_config.mob_skill_db2_table, "%s", w2);
-		else if( strcmpi( w1, "item_cash_db_table" ) == 0 )
-			StringBuf_PrintfClear(mapserv_schema_config.item_cash_db_table, "%s", w2);
-		else if( strcmpi( w1, "item_cash_db2_table" ) == 0 )
-			StringBuf_PrintfClear(mapserv_schema_config.item_cash_db2_table, "%s", w2);
-		else if( strcmpi( w1, "vending_table" ) == 0 )
-			StringBuf_PrintfClear(mapserv_schema_config.vendings_table, "%s", w2);
-		else if( strcmpi( w1, "vending_items_table" ) == 0 )
-			StringBuf_PrintfClear(mapserv_schema_config.vending_items_table, "%s", w2);
-
 		//Map Server SQL DB
 		else if(strcmpi(w1,"map_server_ip")==0)
 			StringBuf_PrintfClear(map_config.map_server_ip, w2);
@@ -3978,10 +3993,7 @@ int map_inter_config_read(char *cfgName)
 			StringBuf_PrintfClear(map_config.map_server_db, w2);
 		else if(strcmpi(w1,"default_codepage")==0)
 			StringBuf_PrintfClear(map_config.default_codepage, w2);
-		else if(strcmpi(w1,"use_sql_db")==0) {
-			mapserv_schema_config.db_use_sqldbs = config_switch(w2);
-			ShowStatus ("Using SQL dbs: %s\n",w2);
-		} else if(strcmpi(w1,"log_db_ip")==0)
+		else if(strcmpi(w1,"log_db_ip")==0)
 			StringBuf_PrintfClear(map_config.log_db_ip, w2);
 		else if(strcmpi(w1,"log_db_id")==0)
 			StringBuf_PrintfClear(map_config.log_db_id, w2);
@@ -3991,8 +4003,6 @@ int map_inter_config_read(char *cfgName)
 			map_config.log_db_port = atoi(w2);
 		else if(strcmpi(w1,"log_db_db")==0)
 			StringBuf_PrintfClear(map_config.log_db_db, w2);
-		else if( mapreg_config_read(w1,w2) )
-			continue;
 		//support the import command, just like any other config
 		else if(strcmpi(w1,"import")==0)
 			map_inter_config_read(w2);
