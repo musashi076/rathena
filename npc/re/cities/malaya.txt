@@ -505,7 +505,7 @@ malaya,363,283,4	script	Local#ma06	582,{
 		mes "Hmm... is it time to be careful of the witches' curse?";
 		next;
 		mes "[Local]";
-		mes "Beware of Mongkukurums needle, foreigner.";
+		mes "Beware of Mangkukulams needle, foreigner.";
 		close;
 	} else if (malaya_hi < 20) {
 		mes "[Local]";
@@ -531,31 +531,31 @@ malaya,363,283,4	script	Local#ma06	582,{
 		close;
 	case 4:
 		mes "[Local]";
-		mes "If you plan to go out of the village, be careful of Tiucknuc. "+.@name$+" is said to be tricked by Tiucknuc and had to go to the hospital.";
+		mes "If you plan to go out of the village, be careful of Tiyanak. "+.@name$+" is said to be tricked by Tiyanak and had to go to the hospital.";
 		close;
 	case 5:
 	case 6:
 		break;
 	}
 	mes "[Local]";
-	mes "The village is chaotic these days. Looks like Mongkukurum is back in the village.";
+	mes "The village is chaotic these days. Looks like Mangkukulam is back in the village.";
 	next;
-	select("Mongkukurum?");
+	select("Mangkukulam?");
 	mes "[Local]";
 	mes "A monster that is also called witch. Looks like a person and also wears clothes.";
 	next;
 	mes "[Local]";
-	mes "Mongkukurum makes a doll out of the people it sees and curses it with needles.";
+	mes "Mangkukulam makes a doll out of the people it sees and curses it with needles.";
 	next;
 	select("Is there a way to recognize this monster?");
 	mes "[Local]";
-	mes "There is one way. All Mongkukurum have red eyes.";
+	mes "There is one way. All Mangkukulam have red eyes.";
 	next;
 	mes "[Local]";
 	mes "You can recognize them by their eyes but! You must remember one thing.";
 	next;
 	mes "[Local]";
-	mes "You will be captivated by Mongkukurum if you stare at their eyes too long.";
+	mes "You will be captivated by Mangkukulam if you stare at their eyes too long.";
 	next;
 	mes "[Local]";
 	mes "Never ever stare into their eyes for too long.";
@@ -671,7 +671,7 @@ malaya,63,185,4	script	Woman#ma08	583,{
 	next;
 	select("Why?");
 	mes "[Woman]";
-	mes "There is a monster named Tiucknuc that roams around outside of the village and cries after transforming himself into a baby.";
+	mes "There is a monster named Tiyanak that roams around outside of the village and cries after transforming himself into a baby.";
 	next;
 	mes "[Woman]";
 	mes "But when kind travelers pick up the baby, it turns back into its original form and attacks.";
