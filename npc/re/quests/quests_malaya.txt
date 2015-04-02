@@ -3194,7 +3194,7 @@ ma_fild02,241,39,5	script	Good Capre Budidai	572,{
 		mes "They're all friends.";
 		next;
 		mes "[Budidai]";
-		mes "Except for that one eyed Bongisungisu.";
+		mes "Except for that one eyed Bungisngissungisu.";
 		mes "He picks on my friends.";
 		mes "I am annoyed, but Budidai is weak.";
 		next;
@@ -3220,7 +3220,7 @@ ma_fild02,241,39,5	script	Good Capre Budidai	572,{
 			mes "I can't do anything about the scary gaze and the flailing club.";
 			next;
 			mes "[Budidai]";
-			mes "Bongisungisu! I get the chills just by being in the same forest with it...";
+			mes "Bungisngis! I get the chills just by being in the same forest with it...";
 			mes "But Budidai is weak.";
 			next;
 			mes "[Budidai]";
@@ -3232,7 +3232,7 @@ ma_fild02,241,39,5	script	Good Capre Budidai	572,{
 		if (.@playtime == 0 || .@playtime == 1) {
 			mes "[Budidai]";
 			mes "Traveler, my friend!";
-			mes "Bongisungisu ran far far away.";
+			mes "Bungisngis ran far far away.";
 			mes "Dogs, cows, horse, goat and rooster will come back to me, won't they?";
 			next;
 			mes "[Budidai]";
@@ -3249,7 +3249,7 @@ ma_fild02,241,39,5	script	Good Capre Budidai	572,{
 				if (checkquest(7409, HUNTING) == 2) {
 					mes "[Budidai]";
 					mes "Astonishing, wanderer!";
-					mes "I could hear the pitiful wails of Bongisungisu all the way from here!";
+					mes "I could hear the pitiful wails of Bungisngis all the way from here!";
 					mes "Budidai can sing again for his friends, yes?";
 					next;
 					mes "[Budidai]";
@@ -3273,7 +3273,7 @@ ma_fild02,241,39,5	script	Good Capre Budidai	572,{
 					close;
 				} else {
 					mes "[Budidai]";
-					mes "Please slay the destructive libertine Bongisungisu.";
+					mes "Please slay the destructive libertine Bungisngis.";
 					mes "For me, a Capre to sing again for one's friends.";
 					close;
 				}
@@ -3281,7 +3281,7 @@ ma_fild02,241,39,5	script	Good Capre Budidai	572,{
 				if (.@playtime == 2) {
 					mes "[Budidai]";
 					mes "Hey, kind wanderer.";
-					mes "Bongisungisu, the one eyed debauchee is back!";
+					mes "Bungisngis, the one eyed debauchee is back!";
 					mes "What do I do? What should I do?";
 					next;
 					mes "[Budidai]";
@@ -3301,7 +3301,7 @@ ma_fild02,241,39,5	script	Good Capre Budidai	572,{
 					mes "I can't do anything about the scary gaze and the flailing club.";
 					next;
 					mes "[Budidai]";
-					mes "Bongisungisu! I get the chills just by being in the same forest with it...";
+					mes "Bungisngis! I get the chills just by being in the same forest with it...";
 					mes "But Budidai is weak.";
 					next;
 					if (select("Shall I take care of it?:That does give the chills.") == 2) {
@@ -3312,7 +3312,7 @@ ma_fild02,241,39,5	script	Good Capre Budidai	572,{
 						close;
 					}
 					mes "[Budidai]";
-					mes "You'd teach Bongisungisu a lesson?!";
+					mes "You'd teach Bungisngis a lesson?!";
 					mes "Kind wanderer!!";
 					mes "Kick some libertine butt!!";
 					setquest 7409;
@@ -8462,7 +8462,7 @@ ma_fild01,179,260,2	script	Festival Helper Boy#pin	577,{
 		mes "I was going back to the village delivering 1000 Lesser Agimats, 1000 Silver Crosses, and 300 Dyestuffs as an errand from Port Malaya.";
 		next;
 		mes "[Isco]";
-		mes "But '^FF8440Bongisungisu^000000' appeared out of nowhere and took the items away from me.";
+		mes "But '^FF8440Bungisngis^000000' appeared out of nowhere and took the items away from me.";
 		next;
 		select("Are you hurt?");
 		emotion e_sigh;
